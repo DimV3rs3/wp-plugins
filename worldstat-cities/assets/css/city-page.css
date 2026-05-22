@@ -1,0 +1,385 @@
+.wsp-city-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wsp-city-page {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+    line-height: 1.5;
+    padding: 2rem 1rem;
+}
+
+/* Старый вывод платформы для города — скрываем, чтобы видеть новый макет. */
+.wsp-city-page .wsp-country-hero,
+.wsp-city-page .wsp-container {
+    display: none;
+}
+
+.wsp-city-page .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    overflow: hidden;
+    padding: 2rem;
+}
+
+/* Навигация со страницы города */
+.wsp-city-page .wsp-city-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.wsp-city-page .wsp-city-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.125rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #1e40af;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.wsp-city-page .wsp-city-nav-btn:hover {
+    color: #1d4ed8;
+    background-color: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.wsp-city-page .wsp-city-nav-btn--ergo {
+    color: #166534;
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.wsp-city-page .wsp-city-nav-btn--ergo:hover {
+    color: #15803d;
+    background-color: #dcfce7;
+    border-color: #86efac;
+}
+
+/* Шапка города */
+.wsp-city-page .city-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.wsp-city-page .city-title h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    margin-bottom: 0.25rem;
+}
+
+.wsp-city-page .city-location {
+    display: flex;
+    gap: 0.75rem;
+    color: #475569;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.wsp-city-page .city-location span {
+    background-color: #f1f5f9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.wsp-city-page .city-stats-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background-color: #f1f5f9;
+    padding: 0.75rem;
+    border-radius: 2rem;
+}
+
+.wsp-city-page .stat-item {
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+    min-width: 190px;
+    flex: 1 1 190px;
+}
+
+.wsp-city-page .stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+}
+
+.wsp-city-page .stat-value {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #1e293b;
+}
+
+.wsp-city-page .stat-hint {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
+    line-height: 1.25;
+    max-width: 16rem;
+}
+
+/* Сетка для карточек графиков */
+.wsp-city-page .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.wsp-city-page .chart-card {
+    background-color: #ffffff;
+    border: 1px solid #e9eef2;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -2px rgba(0,0,0,0.03);
+    transition: all 0.2s;
+}
+
+.wsp-city-page .chart-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+.wsp-city-page .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.wsp-city-page .card-header i {
+    font-size: 1.25rem;
+    color: #3b82f6;
+    background-color: #eff6ff;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+}
+
+.wsp-city-page .card-header h3 {
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: #1e293b;
+}
+
+.wsp-city-page .card-description {
+    font-size: 0.875rem;
+    color: #475569;
+    margin-bottom: 1rem;
+}
+
+/* Контейнер для графиков */
+.wsp-city-page .chart-container {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e9eef2;
+    padding: 1rem;
+}
+
+.wsp-city-page .chart-container canvas {
+    display: block !important;
+}
+
+/* Приводим платформенные графики к единому размеру на странице города. */
+.wsp-city-page .wsp-chart-wrap {
+    width: 100%;
+}
+
+.wsp-city-page .wsp-chart-canvas-wrap {
+    height: 320px !important;
+}
+
+/* Блок оценки эргономичности */
+.wsp-city-page .ergonomics-section {
+    background-color: #f8fafc;
+    border-radius: 2rem;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+}
+
+.wsp-city-page .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.wsp-city-page .section-title i {
+    font-size: 1.75rem;
+    color: #3b82f6;
+}
+
+.wsp-city-page .section-title h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.wsp-city-page .ergonomics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.wsp-city-page .metric-card {
+    background-color: white;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    border: 1px solid #e9eef2;
+}
+
+.wsp-city-page .metric-title {
+    font-size: 0.875rem;
+    color: #475569;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.wsp-city-page .metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.25rem;
+}
+
+.wsp-city-page .metric-unit {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 400;
+}
+
+.wsp-city-page .metric-trend {
+    font-size: 0.75rem;
+    color: #10b981;
+    background-color: #d1fae5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.wsp-city-page .metric-trend.warning {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+.wsp-city-page .metric-trend.neutral {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.wsp-city-page .ergonomics-description {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.wsp-city-page .ergonomics-description p {
+    margin-bottom: 1rem;
+}
+
+.wsp-city-page .ergonomics-description strong {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* Подвкладки города (Обзор/Районы) в стиле платформы. */
+.wsp-city-page .wsp-city-subtabs .wsp-tab-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+.wsp-city-page .wsp-city-subtabs .wsp-tab-btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #6b7280;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 0 0 10px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.wsp-city-page .wsp-city-subtabs .wsp-tab-btn:hover {
+    color: #2563eb;
+}
+
+.wsp-city-page .wsp-city-subtabs .wsp-tab-btn.wsp-tab-active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .wsp-city-page .container {
+        padding: 1rem;
+    }
+
+    .wsp-city-page .city-header {
+        flex-direction: column;
+        align-items: start;
+        gap: 1rem;
+    }
+
+    .wsp-city-page .city-stats-mini {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .wsp-city-page .city-title h1 {
+        font-size: 2rem;
+    }
+
+    .wsp-city-page .wsp-city-subtabs .wsp-tab-nav {
+        gap: 1rem;
+    }
+
+    .wsp-city-page .wsp-city-subtabs .wsp-tab-btn {
+        font-size: 16px;
+        padding-bottom: 8px;
+    }
+}
+

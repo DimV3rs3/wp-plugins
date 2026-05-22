@@ -1,0 +1,209 @@
+/**
+ * WorldStat Cities — Admin styles.
+ */
+
+.wscities-status {
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.wscities-status-sep {
+    color: #c3c4c7;
+    margin: 0 4px;
+}
+
+/* ── Upload Form ──────────────────────────────────── */
+.wscities-upload-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.wscities-upload-form label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+}
+
+/* ── Section Styling ─────────────────────────────── */
+.wsp-admin-section {
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+}
+
+.wsp-admin-section h2 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wsp-admin-section h2 .dashicons {
+    color: #2271b1;
+}
+
+.wsp-admin-section .description code {
+    background: #f0f0f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+/* ── Progress Bar ────────────────────────────────── */
+.wscities-progress-bar {
+    width: 100%;
+    height: 24px;
+    background: #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 16px 0 8px;
+}
+
+.wscities-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2271b1, #3b82f6);
+    border-radius: 12px;
+    width: 0%;
+    transition: width .3s ease;
+}
+
+.wscities-progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #646970;
+    margin-bottom: 12px;
+}
+
+.wscities-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    padding: 10px 0;
+}
+
+.stat-imported strong { color: #16a34a; }
+.stat-updated strong  { color: #2271b1; }
+.stat-skipped strong  { color: #f59e0b; }
+
+/* ── Errors ──────────────────────────────────────── */
+.wscities-errors {
+    margin-top: 12px;
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 12px 16px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.wscities-errors h4 { margin: 0 0 8px; color: #dc2626; }
+.wscities-errors ul { margin: 0; padding-left: 20px; font-size: 12px; }
+.wscities-errors li { margin-bottom: 2px; color: #991b1b; }
+
+/* ── Danger Zone ─────────────────────────────────── */
+.wsp-danger-zone {
+    border-color: #fca5a5;
+    background: #fef7f7;
+}
+
+/* ── Conflict resolution modal ───────────────────── */
+.wscities-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.wscities-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.wscities-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(960px, 100%);
+    max-height: min(90vh, 900px);
+    overflow: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    padding: 20px 24px 24px;
+}
+
+.wscities-modal__dialog h2 {
+    margin: 0 0 8px;
+}
+
+.wscities-modal__intro {
+    margin: 0 0 12px;
+    color: #50575e;
+}
+
+.wscities-modal__toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.wscities-conflict-list {
+    max-height: 50vh;
+    overflow: auto;
+    border: 1px solid #dcdcde;
+    border-radius: 6px;
+    padding: 8px;
+    background: #f6f7f7;
+}
+
+.wscities-conflict-city {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.wscities-conflict-city:last-child {
+    margin-bottom: 0;
+}
+
+.wscities-conflict-city__title {
+    margin: 0 0 8px;
+    font-size: 15px;
+}
+
+.wscities-conflict-city__country {
+    color: #646970;
+    font-weight: 400;
+}
+
+.wscities-conflict-table code {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.wscities-conflict-choices label {
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.wscities-modal__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}

@@ -311,19 +311,63 @@ class WSDistricts_CPT {
     }
 
     /**
- * Общий индекс эргономичности района (делегат в WorldStat Ergonomics).
- *
- * @return array{score:float,level:string,color:string,scores:array<string,float>}
+ * Получить общий индекс эргономичности района
  */
 public static function get_ergonomics_index( int $district_id ): array {
-	if ( class_exists( 'WSErgo_District_Bridge' ) ) {
-		return WSErgo_District_Bridge::get_ergonomics_index( $district_id );
+	$scores = [
+		'comfort' => (float) get_post_meta( $district_id, 'wsdistrict_comfort_score', true ),
+		'safety' => (float) get_post_meta( $district_id, 'wsdistrict_safety_score', true ),
+		'functionality' => (float) get_post_meta( $district_id, 'wsdistrict_functionality_score', true ),
+		'masterability' => (float) get_post_meta( $district_id, 'wsdistrict_masterability_score', true ),
+		'livability' => (float) get_post_meta( $district_id, 'wsdistrict_livability_score', true ),
+		'manageability' => (float) get_post_meta( $district_id, 'wsdistrict_manageability_score', true ),
+	];
+	
+	// Веса для расчета (можно настроить)
+	$weights = [
+		'comfort' => 0.25,
+		'safety' => 0.25,
+		'functionality' => 0.20,
+		'masterability' => 0.10,
+		'livability' => 0.10,
+		'manageability' => 0.10,
+	];
+	
+	$total_score = 0;
+	$total_weight = 0;
+	
+	foreach ($scores as $key => $score) {
+		if ($score > 0) {
+			$total_score += $score * $weights[$key];
+			$total_weight += $weights[$key];
+		}
 	}
+	
+	$ergo_index = $total_weight > 0 ? round($total_score / $total_weight, 1) : 0;
+	
+	// Определение уровня
+	if ($ergo_index >= 80) {
+		$level = 'Отлично';
+		$color = '#10b981';
+	} elseif ($ergo_index >= 60) {
+		$level = 'Хорошо';
+		$color = '#3b82f6';
+	} elseif ($ergo_index >= 40) {
+		$level = 'Средне';
+		$color = '#f59e0b';
+	} elseif ($ergo_index >= 20) {
+		$level = 'Ниже среднего';
+		$color = '#f97316';
+	} else {
+		$level = 'Низкий';
+		$color = '#ef4444';
+	}
+	
 	return [
-		'score'  => 0.0,
-		'level'  => '',
-		'color'  => '#6b7280',
-		'scores' => [],
+		'score' => $ergo_index,
+		'level' => $level,
+		'color' => $color,
+		'scores' => $scores,
 	];
 }
 }

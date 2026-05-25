@@ -36,6 +36,8 @@ class WSDistricts_Admin {
         add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
         add_action( 'save_post_' . WSDistricts_CPT::SLUG, [ $this, 'save_meta' ] );
         
+        // Обработчик сохранения настроек эргономики
+        add_action( 'admin_post_wsergo_toggle_settings', [ $this, 'handle_ergo_settings' ] );
     }
 
     public function register_menus(): void {
@@ -87,6 +89,10 @@ class WSDistricts_Admin {
         $table_air = $wpdb->prefix . 'district_air_quality';
         $total_air_records = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_air}" );
         
+        // Получаем статус эргономики
+        $ergo_enabled = get_option( 'wsergo_neural_active', true );
+        $ergo_auto_calc = get_option( 'wsergo_auto_calculate', true );
+        $last_ergo_update = get_option( 'wsergo_last_update', '' );
         ?>
         <div class="wrap wsp-admin-wrap">
             <h1 class="wsp-admin-title">
@@ -94,26 +100,102 @@ class WSDistricts_Admin {
                 Districts Extension — Импорт данных
             </h1>
             
-            <?php
-            if ( class_exists( 'WSErgo_Extension_Notices' ) ) {
-                WSErgo_Extension_Notices::render_moved_notice( 'territory', 'Districts Extension — Импорт данных' );
-            } else {
-                $ergo_url = admin_url( 'admin.php?page=wsergo-settings#ergo-territory' );
-                ?>
-                <div class="notice notice-info" style="margin:16px 0 24px;padding:14px 18px;">
-                    <p style="margin:0;">
-                        <?php esc_html_e( 'Данная часть плагина была перенесена в', 'worldstat-districts' ); ?>
-                        <a href="<?php echo esc_url( $ergo_url ); ?>"><strong><?php esc_html_e( 'Эргономичность', 'worldstat-districts' ); ?></strong></a>
-                        <?php esc_html_e( '(раздел «Территория (районы)»).', 'worldstat-districts' ); ?>
-                    </p>
+            <!-- ============================================ -->
+            <!-- ПЛАШКА 0: НАСТРОЙКИ ЭРГОНОМИКИ -->
+            <!-- ============================================ -->
+            <div class="wsergo-settings-panel" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 25px; border-radius: 12px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h2 style="color: white; margin: 0 0 10px 0;">
+                            <span class="dashicons dashicons-chart-area" style="color: #10b981;"></span>
+                            🧠 Нейро-эргономика районов
+                        </h2>
+                        <p style="margin: 0; opacity: 0.8; font-size: 14px;">
+                            Автоматический расчет 6 измерений эргономичности: комфортность, безопасность, 
+                            функциональность, освояемость, обитаемость, управляемость на основе ML моделей
+                        </p>
+                    </div>
+                    <div>
+                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display: inline-block;">
+                            <input type="hidden" name="action" value="wsergo_toggle_settings">
+                            <?php wp_nonce_field( 'wsergo_toggle' ); ?>
+                            <input type="hidden" name="ergo_enabled" value="<?php echo $ergo_enabled ? '0' : '1'; ?>">
+                            <button type="submit" class="button" style="background: <?php echo $ergo_enabled ? '#ef4444' : '#10b981'; ?>; border: none; color: white; padding: 8px 20px; border-radius: 20px; cursor: pointer;">
+                                <?php if ( $ergo_enabled ): ?>
+                                    🔴 Отключить эргономику
+                                <?php else: ?>
+                                    🟢 Включить эргономику
+                                <?php endif; ?>
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <?php
-            }
-            ?>
+                
+                <?php if ( $ergo_enabled ): ?>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; gap: 20px;">
+                            <div>
+                                <div style="font-size: 28px; font-weight: bold; color: #10b981;">6</div>
+                                <div style="font-size: 12px; opacity: 0.7;">Измерений</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 28px; font-weight: bold; color: #f59e0b;">12</div>
+                                <div style="font-size: 12px; opacity: 0.7;">Признаков</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 28px; font-weight: bold; color: #8b5cf6;">64-32-6</div>
+                                <div style="font-size: 12px; opacity: 0.7;">Архитектура</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display: inline-block;">
+                                <input type="hidden" name="action" value="wsergo_toggle_settings">
+                                <?php wp_nonce_field( 'wsergo_toggle' ); ?>
+                                <input type="hidden" name="recalc_ergo" value="1">
+                                <button type="submit" class="button" style="background: #3b82f6; border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+                                    🔄 Пересчитать эргономику для всех районов
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <?php if ( $last_ergo_update ): ?>
+                    <div style="margin-top: 15px; font-size: 12px; opacity: 0.6;">
+                        Последнее обновление: <?php echo esc_html( $last_ergo_update ); ?>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px;">
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px;">
+                            <span>✅ Комфортность — качество воздуха, зелень, шум</span>
+                            <span>✅ Безопасность — преступность, ДТП, экология</span>
+                            <span>✅ Функциональность — доступность, смешение, связность</span>
+                            <span>✅ Освояемость — навигация, читаемость, легендирование</span>
+                            <span>✅ Обитаемость — интегральный показатель</span>
+                            <span>✅ Управляемость — реакция служб, мониторинг</span>
+                        </div>
+                    </div>
+                </div>
+                <?php else: ?>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 15px; text-align: center;">
+                        <p style="margin: 0; font-size: 14px;">
+                            ⚠️ Расчёт эргономичности отключен. Включите его для автоматического анализа районов 
+                            на основе данных о качестве воздуха, преступности и пешеходной мобильности.
+                        </p>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
 
             <div class="wsdistricts-status" style="background: #f0f6fc; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
                 <span>Районов в базе: <strong id="wsdistricts-count"><?php echo $total_districts; ?></strong></span>
                 <span style="margin-left: 20px;">📊 Данных о воздухе: <strong><?php echo $total_air_records; ?></strong></span>
+                <?php if ( class_exists( 'WSErgo_District_Bridge' ) && $ergo_enabled ): ?>
+                <span style="margin-left: 20px;">🧠 Эргономика: <strong style="color: #10b981;">Активна</strong></span>
+                <?php endif; ?>
             </div>
 
             <!-- Плашка 1: Импорт районов -->
@@ -466,6 +548,32 @@ jQuery(document).ready(function($) {
         wp_send_json_success( [ 'deleted' => $count ] );
     }
 
+    // ==================== ОБРАБОТЧИК НАСТРОЕК ЭРГОНОМИКИ ====================
+    
+    public function handle_ergo_settings() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Access denied' );
+        }
+        check_admin_referer( 'wsergo_toggle' );
+        
+        if ( isset( $_POST['ergo_enabled'] ) ) {
+            $new_status = (int) $_POST['ergo_enabled'];
+            update_option( 'wsergo_neural_active', $new_status );
+            
+            if ( $new_status && class_exists( 'WSErgo_District_Bridge' ) ) {
+                update_option( 'wsergo_last_update', current_time( 'mysql' ) );
+            }
+        }
+        
+        if ( isset( $_POST['recalc_ergo'] ) && class_exists( 'WSErgo_District_Bridge' ) ) {
+            WSErgo_District_Bridge::update_all_districts();
+            update_option( 'wsergo_last_update', current_time( 'mysql' ) );
+        }
+        
+        wp_redirect( wp_get_referer() );
+        exit;
+    }
+
     // ==================== КОЛОНКИ И МЕТАБОКСЫ ====================
 
     public function columns( array $cols ): array {
@@ -533,6 +641,99 @@ jQuery(document).ready(function($) {
             'high'
         );
         
+        // Добавляем метабокс эргономики если плагин активен
+        if ( class_exists( 'WSErgo_District_Bridge' ) && get_option( 'wsergo_neural_active', true ) ) {
+            add_meta_box(
+                'wsdistrict_ergonomics',
+                '🧠 Нейро-эргономика района',
+                [ $this, 'render_ergo_metabox' ],
+                WSDistricts_CPT::SLUG,
+                'side',
+                'high'
+            );
+        }
+    }
+    
+    public function render_ergo_metabox( $post ): void {
+        $comfort = (float) get_post_meta( $post->ID, 'wsdistrict_comfort_score', true );
+        $safety = (float) get_post_meta( $post->ID, 'wsdistrict_safety_score', true );
+        $functionality = (float) get_post_meta( $post->ID, 'wsdistrict_functionality_score', true );
+        $walkability = (float) get_post_meta( $post->ID, 'wsdistrict_walkability_score', true );
+        $air_class = get_post_meta( $post->ID, 'wsdistrict_air_quality_class', true );
+        $crime_level = get_post_meta( $post->ID, 'wsdistrict_crime_level', true );
+        
+        $air_color = '#6b7280';
+        $air_text = 'Нет данных';
+        if ( $air_class == 'Good' ) {
+            $air_color = '#10b981';
+            $air_text = 'Хорошее';
+        } elseif ( $air_class == 'Moderate' ) {
+            $air_color = '#f59e0b';
+            $air_text = 'Среднее';
+        } elseif ( $air_class == 'Poor' ) {
+            $air_color = '#ef4444';
+            $air_text = 'Плохое';
+        }
+        
+        $crime_color = '#6b7280';
+        $crime_text = 'Нет данных';
+        if ( $crime_level == 'Low' ) {
+            $crime_color = '#10b981';
+            $crime_text = 'Низкий';
+        } elseif ( $crime_level == 'Medium' ) {
+            $crime_color = '#f59e0b';
+            $crime_text = 'Средний';
+        } elseif ( $crime_level == 'High' ) {
+            $crime_color = '#ef4444';
+            $crime_text = 'Высокий';
+        }
+        ?>
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 15px; border-radius: 8px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 11px; color: #666;">Качество воздуха</div>
+                    <div style="font-size: 18px; font-weight: bold; color: <?php echo $air_color; ?>;"><?php echo $air_text; ?></div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 11px; color: #666;">Преступность</div>
+                    <div style="font-size: 18px; font-weight: bold; color: <?php echo $crime_color; ?>;"><?php echo $crime_text; ?></div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <div style="font-size: 11px; color: #666;">Комфортность</div>
+                <div style="height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 4px;">
+                    <div style="width: <?php echo $comfort; ?>%; height: 100%; background: #10b981; border-radius: 3px;"></div>
+                </div>
+                <div style="text-align: right; font-size: 12px; font-weight: bold;"><?php echo round( $comfort ); ?>/100</div>
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <div style="font-size: 11px; color: #666;">Безопасность</div>
+                <div style="height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 4px;">
+                    <div style="width: <?php echo $safety; ?>%; height: 100%; background: #8b5cf6; border-radius: 3px;"></div>
+                </div>
+                <div style="text-align: right; font-size: 12px; font-weight: bold;"><?php echo round( $safety ); ?>/100</div>
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <div style="font-size: 11px; color: #666;">Функциональность</div>
+                <div style="height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 4px;">
+                    <div style="width: <?php echo $functionality; ?>%; height: 100%; background: #f59e0b; border-radius: 3px;"></div>
+                </div>
+                <div style="text-align: right; font-size: 12px; font-weight: bold;"><?php echo round( $functionality ); ?>/100</div>
+            </div>
+            
+            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1);">
+                <div style="font-size: 11px; color: #666;">Пешеходная доступность</div>
+                <div style="font-size: 16px; font-weight: bold; color: #8b5cf6;"><?php echo round( $walkability ); ?>/100</div>
+            </div>
+            
+            <div style="margin-top: 10px; font-size: 10px; color: #666; text-align: center;">
+                🤖 Нейросетевая модель v2.0
+            </div>
+        </div>
+        <?php
     }
 
     public function render_info_metabox( $post ): void {

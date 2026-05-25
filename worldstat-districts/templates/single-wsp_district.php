@@ -25,6 +25,11 @@ while ( have_posts() ) : the_post();
         return;
     }
     
+    // ============================================
+    // ОБЩИЙ ИНДЕКС ЭРГОНОМИЧНОСТИ
+    // ============================================
+    $ergo = WSDistricts_CPT::get_ergonomics_index( $district_id );
+    
     // Получаем пешеходные данные
     $walkability_score = get_post_meta( $district_id, 'wsdistrict_walkability_score', true );
     $pedestrian_demand_score = get_post_meta( $district_id, 'wsdistrict_pedestrian_demand_score', true );
@@ -182,9 +187,16 @@ while ( have_posts() ) : the_post();
         
         <div class="wsp-container">
             
-            <?php do_action( 'wsp_district_ergo_main_card', $district_id ); ?>
-            <?php do_action( 'wsp_district_ergo_extras', $district_id ); ?>
-
+            <!-- Главный индекс эргономичности -->
+            <div class="wsergo-main-card" style="background: linear-gradient(135deg, <?php echo $ergo['color']; ?>20 0%, <?php echo $ergo['color']; ?>05 100%); border-radius: 20px; padding: 30px; margin-bottom: 30px; text-align: center; border: 2px solid <?php echo $ergo['color']; ?>;">
+                <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: <?php echo $ergo['color']; ?>;">Индекс эргономичности</div>
+                <div style="font-size: 72px; font-weight: bold; color: <?php echo $ergo['color']; ?>; line-height: 1;"><?php echo $ergo['score']; ?></div>
+                <div style="font-size: 24px; font-weight: 500; color: <?php echo $ergo['color']; ?>;"><?php echo $ergo['level']; ?></div>
+                <div style="margin-top: 15px; padding: 10px 20px; background: rgba(0,0,0,0.05); border-radius: 30px; display: inline-block;">
+                    <?php echo $ergo['score'] >= 60 ? '🌟 Отличная эргономика среды' : ( $ergo['score'] >= 40 ? '📈 Средний уровень, есть потенциал для улучшения' : '⚠️ Требуется внимание к развитию среды' ); ?>
+                </div>
+            </div>
+            
             <!-- ============================================ -->
             <!-- РАСШИРЕННЫЕ ВКЛАДКИ -->
             <!-- ============================================ -->

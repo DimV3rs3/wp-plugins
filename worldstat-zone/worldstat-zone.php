@@ -248,11 +248,6 @@ function wsz_render_datasets_tab() {
         WSZ_CPT::SLUG
     ) );
     ?>
-    <?php
-    if ( class_exists( 'WSErgo_Extension_Notices' ) ) {
-        WSErgo_Extension_Notices::render_moved_notice( 'zone', 'WorldStat Zones — Датасеты' );
-    }
-    ?>
     <h2>📊 Доступные датасеты</h2>
     <?php if ( empty( $datasets ) ): ?>
         <div class="notice notice-info">

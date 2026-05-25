@@ -135,8 +135,6 @@ while ( have_posts() ) : the_post();
         </div>
         
         <div class="wsp-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-
-            <?php do_action( 'wsz_zone_ergo_summary', get_the_ID() ); ?>
             
             <?php if ( $has_metrics ): ?>
             <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 25px; border-radius: 12px; margin-bottom: 30px;">

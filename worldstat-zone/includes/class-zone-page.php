@@ -101,20 +101,6 @@ class WSZ_Page {
         
         ?>
         <div class="wsz-admin-container">
-            <?php
-            if ( class_exists( 'WSErgo_Extension_Notices' ) ) {
-                WSErgo_Extension_Notices::render_moved_notice( 'zone', 'WorldStat Zones' );
-            } else {
-                ?>
-                <div class="notice notice-info" style="margin:0 0 20px;padding:14px 18px;">
-                    <p style="margin:0;">
-                        <?php esc_html_e( 'Настройки эргономичности зон перенесены в плагин', 'worldstat-zone' ); ?>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wsergo-settings#ergo-zone' ) ); ?>"><strong><?php esc_html_e( 'Эргономичность', 'worldstat-zone' ); ?></strong></a>.
-                    </p>
-                </div>
-                <?php
-            }
-            ?>
             <style>
                 .wsz-admin-container { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 10px 0; }
                 .wsz-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }

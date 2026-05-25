@@ -96,6 +96,40 @@ add_filter( 'worldstat_extension_post_types', function ( array $types ): array {
     return $types;
 } );
 
+// Инициализация настроек эргономики при активации
+register_activation_hook( __FILE__, function() {
+    if ( get_option( 'wsergo_neural_active' ) === false ) {
+        add_option( 'wsergo_neural_active', true );
+    }
+    if ( get_option( 'wsergo_auto_calculate' ) === false ) {
+        add_option( 'wsergo_auto_calculate', true );
+    }
+});
+/**
+ * Шорткод для вывода индекса эргономичности района
+ * [district_ergo_index id="123"] или [district_ergo_index] (на странице района)
+ */
+add_shortcode( 'district_ergo_index', function( $atts ) {
+	$atts = shortcode_atts( [ 'id' => 0 ], $atts );
+	$district_id = $atts['id'] ?: get_the_ID();
+	
+	if ( ! $district_id || get_post_type( $district_id ) !== 'wsp_district' ) {
+		return '';
+	}
+	
+	$ergo = WSDistricts_CPT::get_ergonomics_index( $district_id );
+	if ( $ergo['score'] == 0 ) {
+		return '';
+	}
+	
+	ob_start();
+	?>
+	<div class="wsergo-shortcode" style="display: inline-block; background: <?php echo $ergo['color']; ?>; color: white; padding: 8px 16px; border-radius: 30px; font-size: 14px; font-weight: bold;">
+		🏆 Эргономичность: <?php echo $ergo['score']; ?> баллов (<?php echo $ergo['level']; ?>)
+	</div>
+	<?php
+	return ob_get_clean();
+} );
 /* ── Handle district creation from POST request ──────── */
 add_action( 'init', function() {
     if ( isset( $_POST['create_ny_districts'] ) && isset( $_POST['create_ny_nonce'] ) ) {

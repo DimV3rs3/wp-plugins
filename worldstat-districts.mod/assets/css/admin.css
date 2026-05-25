@@ -1,0 +1,180 @@
+/**
+ * Admin styles for Districts extension
+ */
+
+.wsdistricts-gauge {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.wsdistricts-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wsdistricts-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.wsdistricts-progress-bar {
+    height: 20px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.wsdistricts-progress-fill {
+    height: 100%;
+    background: #2271b1;
+    transition: width 0.3s;
+}
+
+.wsdistricts-stats span {
+    display: inline-block;
+}
+
+.wsdistricts-stats .stat-imported strong {
+    color: #2271b1;
+}
+
+.wsdistricts-stats .stat-updated strong {
+    color: #f59e0b;
+}
+
+.wsdistricts-stats .stat-skipped strong {
+    color: #6b7280;
+}
+
+.wsdistricts-errors {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: 4px;
+}
+
+.wsdistricts-errors h4 {
+    color: #b91c1c;
+}
+
+.wsdistricts-errors ul {
+    color: #b91c1c;
+}
+
+.wsp-danger-zone {
+    border: 2px dashed #d63638;
+    background: #fff5f5;
+    padding: 20px;
+}
+
+.wsp-stat-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.wsp-stat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.wsp-stat-icon .dashicons {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+}
+
+.wsp-stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.wsp-stat-label {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wsdistricts-cards {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .wsdistrict-scores {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .wsdistrict-analysis {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .wsp-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .wsp-stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+/* City tab styles */
+.wsdistricts-city-tab {
+    padding: 20px 0;
+}
+
+.wsdistricts-city-tab .wsp-stat-card {
+    transition: transform 0.2s;
+}
+
+.wsdistricts-city-tab .wsp-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.wsdistricts-city-tab .wsp-section-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.wsdistricts-city-tab .wsp-section-desc {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* District cards in city tab */
+.wsdistricts-city-tab .wsdistricts-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wsdistricts-city-tab .wsdistricts-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* Regression styles */
+.regression-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.regression-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.regression-card code {
+    background: #f3f4f6;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 10px;
+    word-break: break-all;
+}
+.wsergo-regression-block {
+    transition: transform 0.2s;
+}
+.wsergo-regression-block:hover {
+    transform: translateY(-2px);
+}

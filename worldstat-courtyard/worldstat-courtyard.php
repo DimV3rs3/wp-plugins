@@ -138,6 +138,10 @@ add_filter( 'worldstat_extension_post_types', function ( array $types ): array {
 	return $types;
 } );
 
+/* ─── Hook into ergonomics auto-yard creation ───────────────── */
+add_action( 'wsc_building_imported',   [ 'WSC_Ergo_Bridge', 'on_building_imported' ], 20, 2 );
+add_action( 'wsc_buffer_recomputed',   [ 'WSC_Ergo_Bridge', 'on_buffer_recomputed' ], 20, 2 );
+
 /* ─── Cleanup: при удалении wsp_building поста обнуляем wsc_buildings.ergo_post_id ─── */
 add_action( 'before_delete_post', function ( int $post_id ): void {
 	$post = get_post( $post_id );

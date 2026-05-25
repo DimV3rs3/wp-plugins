@@ -13,8 +13,12 @@
         if (!parts.length) {
             return null;
         }
+        var tab = parts[0];
+        if (tab === 'ergo-compare') {
+            tab = 'compare';
+        }
         return {
-            tab: parts[0],
+            tab: tab,
             subtab: parts[1] || ''
         };
     }
